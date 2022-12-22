@@ -2,7 +2,6 @@ import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import ListSubheader from "@mui/material/ListSubheader";
 import StatisticsIcon from "@mui/icons-material/BarChart";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import UsersIcon from "@mui/icons-material/Person";
@@ -15,56 +14,56 @@ import LogsIcon from "@mui/icons-material/Book";
 export const mainListItems = (
   <React.Fragment>
 
-    <ListItemButton>
+    <ListItemButton href="/ScoreBoard">
       <ListItemIcon>
         <ScoreboardIcon />
       </ListItemIcon>
       <ListItemText primary="Skor Tablosu" />
     </ListItemButton>
 
-    <ListItemButton>
+    <ListItemButton href="/Questions">
       <ListItemIcon>
         <QuestionsIcon />
       </ListItemIcon>
       <ListItemText primary="Sorular" />
     </ListItemButton>
 
-    <ListItemButton>
+    <ListItemButton href="/Stats">
       <ListItemIcon>
         <StatisticsIcon />
       </ListItemIcon>
       <ListItemText primary="İstatistik" />
     </ListItemButton>
 
-    <ListItemButton>
+    <ListItemButton href="/Notifications">
       <ListItemIcon>
         <NotificationsIcon />
       </ListItemIcon>
       <ListItemText primary="Bildirimler" />
     </ListItemButton>
 
-    <ListItemButton>
+    <ListItemButton href="/Users">
       <ListItemIcon>
         <UsersIcon />
       </ListItemIcon>
       <ListItemText primary="Kullanıcılar" />
     </ListItemButton>
 
-    <ListItemButton>
+    <ListItemButton href="/Teams">
       <ListItemIcon>
         <TeamsIcon />
       </ListItemIcon>
       <ListItemText primary="Takımlar" />
     </ListItemButton>
     
-    <ListItemButton>
+    <ListItemButton href="/Config">
       <ListItemIcon>
         <ConfigIcon />
       </ListItemIcon>
       <ListItemText primary="Ayarlar" />
     </ListItemButton>
 
-    <ListItemButton>
+    <ListItemButton href="/Log">
       <ListItemIcon>
         <LogsIcon />
       </ListItemIcon>

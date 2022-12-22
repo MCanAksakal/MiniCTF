@@ -14,9 +14,12 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import {mainListItems} from "./listitems";
-import Scoreboard from "../components/scoreboard";
-
+import { mainListItems } from "../components/listitems";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import StarIcon from "@mui/icons-material/Star";
 
 function Copyright(props) {
   return (
@@ -84,7 +87,75 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-export default function DashboardContent(props) {
+function createData(fullname, isAdmin, id) {
+  return {
+    fullname,
+    isAdmin,
+    id,
+  };
+}
+
+const users = [
+  createData("Donut", false, 1),
+  createData("Cupcake", true, 2),
+  createData("Eclair", false, 3),
+  createData("Frozen yoghurt", false, 4),
+  createData("Gingerbread", false, 5),
+  createData("Honeycomb", false, 6),
+  createData("Ice cream sandwich", false, 7),
+  createData("Jelly Bean", false, 8),
+  createData("KitKat", false, 9),
+  createData("Lollipop", false, 10),
+  createData("Marshmallow", false, 11),
+  createData("Nougat", false, 12),
+  createData("Oreo", false, 13),
+];
+
+function MainComponent() {
+  return (
+    <>
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: "24px",
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Kullanıcı Listesi
+        </Typography>
+      </Container>
+      <List
+      sx={{
+        width: '100%',
+        bgcolor: 'background.paper',
+        position: 'relative',
+        overflow: 'auto',
+        maxHeight: 400,
+        paddingTop: '16px',
+        paddingBottom: '16px',
+      }}
+    >
+        {users.map((user) => 
+          <ListItem disablePadding>
+            <ListItemButton href={"#" + user.id}>
+              {user.isAdmin ? (
+                <ListItemIcon>
+                  <StarIcon />
+                </ListItemIcon>
+              ) : (
+                ""
+              )}
+              <ListItemText inset={!user.isAdmin} primary={user.fullname} />
+            </ListItemButton>
+          </ListItem>)}
+      </List>
+    </>
+  );
+}
+
+export default function Users() {
   const [open, setOpen] = React.useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -119,7 +190,7 @@ export default function DashboardContent(props) {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              {props.Title}
+              Kullanıcılar
             </Typography>
           </Toolbar>
         </AppBar>
@@ -137,9 +208,7 @@ export default function DashboardContent(props) {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">
-            {mainListItems}
-          </List>
+          <List component="nav">{mainListItems}</List>
         </Drawer>
         <Box
           component="main"
@@ -154,10 +223,10 @@ export default function DashboardContent(props) {
           }}
         >
           <Toolbar />
-          <Container  sx={{ mt: 4, mb: 4 }}>
+          <Container sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
               <Grid item xs={12} md={16}>
-                  <Scoreboard />
+                <MainComponent />
               </Grid>
             </Grid>
           </Container>
