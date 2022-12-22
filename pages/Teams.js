@@ -131,8 +131,7 @@ function MainComponent() {
         position: 'relative',
         overflow: 'auto',
         maxHeight: 400,
-        paddingTop: '16px',
-        paddingBottom: '16px',
+        padding: '16px',
       }}
     >
         {teams.map((team) => 
