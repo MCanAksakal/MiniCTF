@@ -15,6 +15,16 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { mainListItems } from "../components/listitems";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from '@mui/icons-material/Close';
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -80,14 +90,91 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
+function createData(username, questionId, answer, status, time, id) {
+  return {
+    username,
+    questionId,
+    answer,
+    status,
+    time,
+    id,
+  };
+}
+
 const mdTheme = createTheme();
 
 function MainComponent() {
-    return(
-        <>
-            <h1> Hello</h1>
-        </>
-    );
+  const [response, setResponse] = React.useState(null);
+  const [error, setError] = React.useState("");
+  const [loaded, setLoaded] = React.useState(false);
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(`logs.json`);
+
+        setResponse(response.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoaded(true);
+      }
+    })();
+  }, []);
+
+  if (loaded && response.data.length > rows.length) {
+    for (const [index, element] of response.data.entries()) {
+      rows.push(
+        createData(
+          element.username,
+          element.questionId,
+          element.answer,
+          element.status,
+          element.time,
+          index + 1
+        )
+      );
+    }
+  }
+
+  return (
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Kullanıcı Adı</TableCell>
+              <TableCell align="right">Soru Id</TableCell>
+              <TableCell align="right">Cevap</TableCell>
+              <TableCell align="right">Durum</TableCell>
+              <TableCell align="right">Tarih</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.username}
+                </TableCell>
+                <TableCell align="right">{row.questionId}</TableCell>
+                <TableCell align="right">{row.answer}</TableCell>
+                {row.status ? (
+                  <TableCell align="right"><CheckIcon /></TableCell>
+                ) : (
+                  <TableCell align="right"><CloseIcon /></TableCell>
+                )}
+                <TableCell align="right">{row.time}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
 }
 
 export default function Log() {
@@ -182,5 +269,3 @@ export default function Log() {
     </ThemeProvider>
   );
 }
-
-
