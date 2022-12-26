@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "firstName": "Mehmet Can",
+      "lastName": "Aksakal",
+      "email": "mcannaksakal@gmail.com",
+      "username": "MCann",
+      "password": "12345678",
+      "isAdmin": true
+    },
+    {
+      "firstName": "Ahmet",
+      "lastName": "Şahin",
+      "email": "ahmetsahin@gmail.com",
+      "username": "Ahmet",
+      "password": "12345678",
+      "isAdmin": false
+    },
+    {
+      "firstName": "Mert",
+      "lastName": "Kartal",
+      "email": "mertkartal@gmail.com",
+      "username": "Mert",
+      "password": "12345678",
+      "isAdmin": false
+    },
+    {
+      "firstName": "Emre",
+      "lastName": "Doğan",
+      "email": "emredogan@gmail.com",
+      "username": "Emre",
+      "password": "12345678",
+      "isAdmin": false
+    }
+  ]
+}

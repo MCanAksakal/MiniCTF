@@ -36,6 +36,9 @@ export default function NewUser() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+      email: data.get("email"),
       username: data.get("username"),
       password: data.get("password"),
     });

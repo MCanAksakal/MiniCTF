@@ -20,6 +20,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import StarIcon from "@mui/icons-material/Star";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -87,31 +88,62 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function createData(fullname, isAdmin, id) {
+function createData(
+  firstName,
+  lastName,
+  username,
+  email,
+  password,
+  isAdmin,
+  id
+) {
   return {
-    fullname,
+    firstName,
+    lastName,
+    username,
+    email,
+    password,
     isAdmin,
     id,
   };
 }
 
-const users = [
-  createData("Donut", false, 1),
-  createData("Cupcake", true, 2),
-  createData("Eclair", false, 3),
-  createData("Frozen yoghurt", false, 4),
-  createData("Gingerbread", false, 5),
-  createData("Honeycomb", false, 6),
-  createData("Ice cream sandwich", false, 7),
-  createData("Jelly Bean", false, 8),
-  createData("KitKat", false, 9),
-  createData("Lollipop", false, 10),
-  createData("Marshmallow", false, 11),
-  createData("Nougat", false, 12),
-  createData("Oreo", false, 13),
-];
-
 function MainComponent() {
+  const [response, setResponse] = React.useState(null);
+  const [error, setError] = React.useState("");
+  const [loaded, setLoaded] = React.useState(false);
+  const [users, setUsers] = React.useState([]);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(`users.json`);
+
+        setResponse(response.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoaded(true);
+      }
+    })();
+  }, []);
+
+  if (loaded && response.data.length > users.length) {
+    for (const [index, element] of response.data.entries()) {
+      users.push(
+        createData(
+          element.firstName,
+          element.lastName,
+          element.username,
+          element.email,
+          element.password,
+          element.isAdmin,
+          index+1
+        )
+      );
+    }
+  }
+
   return (
     <>
       <Container
@@ -127,18 +159,18 @@ function MainComponent() {
         </Typography>
       </Container>
       <List
-      sx={{
-        width: '100%',
-        bgcolor: 'background.paper',
-        position: 'relative',
-        overflow: 'auto',
-        maxHeight: 400,
-        paddingTop: '16px',
-        paddingBottom: '16px',
-      }}
-    >
-        {users.map((user) => 
-          <ListItem disablePadding>
+        sx={{
+          width: "100%",
+          bgcolor: "background.paper",
+          position: "relative",
+          overflow: "auto",
+          maxHeight: 400,
+          paddingTop: "16px",
+          paddingBottom: "16px",
+        }}
+      >
+        {users.map((user) => (
+          <ListItem disablePadding key={user.id}>
             <ListItemButton href={"#" + user.id}>
               {user.isAdmin ? (
                 <ListItemIcon>
@@ -147,9 +179,13 @@ function MainComponent() {
               ) : (
                 ""
               )}
-              <ListItemText inset={!user.isAdmin} primary={user.fullname} />
+              <ListItemText
+                inset={!user.isAdmin}
+                primary={user.firstName + " " + user.lastName}
+              />
             </ListItemButton>
-          </ListItem>)}
+          </ListItem>
+        ))}
       </List>
     </>
   );
