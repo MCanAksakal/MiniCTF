@@ -24,10 +24,9 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import Tooltip from '@mui/material/Tooltip';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { mainListItems } from "../components/listitems";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -95,28 +94,12 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function createData(name, score) {
+function createData(name, score, id) {
   return {
     name,
     score,
   };
 }
-
-const rows = [
-  createData('Donut', 452),
-  createData('Cupcake', 305),
-  createData('Eclair', 262),
-  createData('Frozen yoghurt', 212),
-  createData('Gingerbread', 356),
-  createData('Honeycomb', 408),
-  createData('Ice cream sandwich', 237),
-  createData('Jelly Bean', 375),
-  createData('KitKat', 518),
-  createData('Lollipop', 392),
-  createData('Marshmallow', 318),
-  createData('Nougat', 360),
-  createData('Oreo', 437),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -151,7 +134,7 @@ const headCells = [
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Takım Adı',
+    label: 'Kullanıcı Adı',
   },
   {
     id: 'score',
@@ -221,11 +204,6 @@ function EnhancedTableToolbar(props) {
         >
           Skor Tablosu
         </Typography>
-        <Tooltip title="Filtrele">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
     </Toolbar>
   );
 }
@@ -235,6 +213,37 @@ function EnhancedTable() {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const [response, setResponse] = React.useState(null);
+  const [error, setError] = React.useState("");
+  const [loaded, setLoaded] = React.useState(false);
+  const [rows, setRows] = React.useState([]);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(`scoreboard.json`);
+
+        setResponse(response.data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoaded(true);
+      }
+    })();
+  }, []);
+
+  if (loaded && response.data.length > rows.length) {
+    for (const [index, element] of response.data.entries()) {
+      rows.push(
+        createData(
+          element.username,
+          element.score,
+          index+1
+        )
+      );
+    }
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -279,7 +288,7 @@ function EnhancedTable() {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      href={"#"}
                       role="checkbox"
                       tabIndex={-1}
                       key={row.name}
@@ -314,7 +323,7 @@ function EnhancedTable() {
           count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
-          labelRowsPerPage="Sayfa başına takım sayısı: "
+          labelRowsPerPage="Sayfa başına kullanıcı sayısı: "
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
